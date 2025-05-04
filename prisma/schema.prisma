@@ -9,14 +9,15 @@ datasource db {
 }
 
 model budgets {
-  budget_id  Int       @id @default(autoincrement())
-  user_id    Int
-  name       String    @db.VarChar(255)
-  amount     Decimal   @db.Decimal(10, 2)
-  start_date DateTime? @db.Date
-  end_date   DateTime? @db.Date
-  created_at DateTime? @default(now()) @db.Timestamp(6)
-  users      users     @relation(fields: [user_id], references: [userid], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_budgets")
+  budget_id    Int            @id @default(autoincrement())
+  user_id      Int
+  name         String         @db.VarChar(255)
+  amount       Decimal        @db.Decimal(10, 2)
+  start_date   DateTime?      @db.Date
+  end_date     DateTime?      @db.Date
+  created_at   DateTime?      @default(now()) @db.Timestamp(6)
+  users        users          @relation(fields: [user_id], references: [userid], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_budgets")
+  transactions transactions[]
 
   @@unique([user_id, name], map: "unique_user_budget_name")
 }
@@ -41,6 +42,8 @@ model transactions {
   transaction_date DateTime?  @db.Date
   created_at       DateTime?  @default(now()) @db.Timestamp(6)
   updated_at       DateTime?  @default(now()) @db.Timestamp(6)
+  budget_id        Int?
+  budgets          budgets?   @relation(fields: [budget_id], references: [budget_id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_budget_fk")
   categories       categories @relation(fields: [category_id], references: [category_id], onDelete: Cascade, onUpdate: NoAction, map: "transactions_category_fk")
   users            users      @relation(fields: [user_id], references: [userid], onDelete: Cascade, onUpdate: NoAction, map: "transactions_user_fk")
 }

@@ -146,7 +146,8 @@ exports.Prisma.TransactionsScalarFieldEnum = {
   description: 'description',
   transaction_date: 'transaction_date',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  budget_id: 'budget_id'
 };
 
 exports.Prisma.UsersScalarFieldEnum = {

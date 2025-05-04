@@ -1138,6 +1138,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type BudgetsCountOutputType
+   */
+
+  export type BudgetsCountOutputType = {
+    transactions: number
+  }
+
+  export type BudgetsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactions?: boolean | BudgetsCountOutputTypeCountTransactionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BudgetsCountOutputType without action
+   */
+  export type BudgetsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetsCountOutputType
+     */
+    select?: BudgetsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BudgetsCountOutputType without action
+   */
+  export type BudgetsCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: transactionsWhereInput
+  }
+
+
+  /**
    * Count Type CategoriesCountOutputType
    */
 
@@ -1444,6 +1475,8 @@ export namespace Prisma {
     end_date?: boolean
     created_at?: boolean
     users?: boolean | usersDefaultArgs<ExtArgs>
+    transactions?: boolean | budgets$transactionsArgs<ExtArgs>
+    _count?: boolean | BudgetsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["budgets"]>
 
   export type budgetsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1481,6 +1514,8 @@ export namespace Prisma {
   export type budgetsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"budget_id" | "user_id" | "name" | "amount" | "start_date" | "end_date" | "created_at", ExtArgs["result"]["budgets"]>
   export type budgetsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | usersDefaultArgs<ExtArgs>
+    transactions?: boolean | budgets$transactionsArgs<ExtArgs>
+    _count?: boolean | BudgetsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type budgetsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | usersDefaultArgs<ExtArgs>
@@ -1493,6 +1528,7 @@ export namespace Prisma {
     name: "budgets"
     objects: {
       users: Prisma.$usersPayload<ExtArgs>
+      transactions: Prisma.$transactionsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       budget_id: number
@@ -1897,6 +1933,7 @@ export namespace Prisma {
   export interface Prisma__budgetsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     users<T extends usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, usersDefaultArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    transactions<T extends budgets$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, budgets$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$transactionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2326,6 +2363,30 @@ export namespace Prisma {
      * Limit how many budgets to delete.
      */
     limit?: number
+  }
+
+  /**
+   * budgets.transactions
+   */
+  export type budgets$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the transactions
+     */
+    select?: transactionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the transactions
+     */
+    omit?: transactionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: transactionsInclude<ExtArgs> | null
+    where?: transactionsWhereInput
+    orderBy?: transactionsOrderByWithRelationInput | transactionsOrderByWithRelationInput[]
+    cursor?: transactionsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionsScalarFieldEnum | TransactionsScalarFieldEnum[]
   }
 
   /**
@@ -3490,6 +3551,7 @@ export namespace Prisma {
     user_id: number | null
     category_id: number | null
     amount: Decimal | null
+    budget_id: number | null
   }
 
   export type TransactionsSumAggregateOutputType = {
@@ -3497,6 +3559,7 @@ export namespace Prisma {
     user_id: number | null
     category_id: number | null
     amount: Decimal | null
+    budget_id: number | null
   }
 
   export type TransactionsMinAggregateOutputType = {
@@ -3508,6 +3571,7 @@ export namespace Prisma {
     transaction_date: Date | null
     created_at: Date | null
     updated_at: Date | null
+    budget_id: number | null
   }
 
   export type TransactionsMaxAggregateOutputType = {
@@ -3519,6 +3583,7 @@ export namespace Prisma {
     transaction_date: Date | null
     created_at: Date | null
     updated_at: Date | null
+    budget_id: number | null
   }
 
   export type TransactionsCountAggregateOutputType = {
@@ -3530,6 +3595,7 @@ export namespace Prisma {
     transaction_date: number
     created_at: number
     updated_at: number
+    budget_id: number
     _all: number
   }
 
@@ -3539,6 +3605,7 @@ export namespace Prisma {
     user_id?: true
     category_id?: true
     amount?: true
+    budget_id?: true
   }
 
   export type TransactionsSumAggregateInputType = {
@@ -3546,6 +3613,7 @@ export namespace Prisma {
     user_id?: true
     category_id?: true
     amount?: true
+    budget_id?: true
   }
 
   export type TransactionsMinAggregateInputType = {
@@ -3557,6 +3625,7 @@ export namespace Prisma {
     transaction_date?: true
     created_at?: true
     updated_at?: true
+    budget_id?: true
   }
 
   export type TransactionsMaxAggregateInputType = {
@@ -3568,6 +3637,7 @@ export namespace Prisma {
     transaction_date?: true
     created_at?: true
     updated_at?: true
+    budget_id?: true
   }
 
   export type TransactionsCountAggregateInputType = {
@@ -3579,6 +3649,7 @@ export namespace Prisma {
     transaction_date?: true
     created_at?: true
     updated_at?: true
+    budget_id?: true
     _all?: true
   }
 
@@ -3677,6 +3748,7 @@ export namespace Prisma {
     transaction_date: Date | null
     created_at: Date | null
     updated_at: Date | null
+    budget_id: number | null
     _count: TransactionsCountAggregateOutputType | null
     _avg: TransactionsAvgAggregateOutputType | null
     _sum: TransactionsSumAggregateOutputType | null
@@ -3707,6 +3779,8 @@ export namespace Prisma {
     transaction_date?: boolean
     created_at?: boolean
     updated_at?: boolean
+    budget_id?: boolean
+    budgets?: boolean | transactions$budgetsArgs<ExtArgs>
     categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transactions"]>
@@ -3720,6 +3794,8 @@ export namespace Prisma {
     transaction_date?: boolean
     created_at?: boolean
     updated_at?: boolean
+    budget_id?: boolean
+    budgets?: boolean | transactions$budgetsArgs<ExtArgs>
     categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transactions"]>
@@ -3733,6 +3809,8 @@ export namespace Prisma {
     transaction_date?: boolean
     created_at?: boolean
     updated_at?: boolean
+    budget_id?: boolean
+    budgets?: boolean | transactions$budgetsArgs<ExtArgs>
     categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transactions"]>
@@ -3746,18 +3824,22 @@ export namespace Prisma {
     transaction_date?: boolean
     created_at?: boolean
     updated_at?: boolean
+    budget_id?: boolean
   }
 
-  export type transactionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"transaction_id" | "user_id" | "category_id" | "amount" | "description" | "transaction_date" | "created_at" | "updated_at", ExtArgs["result"]["transactions"]>
+  export type transactionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"transaction_id" | "user_id" | "category_id" | "amount" | "description" | "transaction_date" | "created_at" | "updated_at" | "budget_id", ExtArgs["result"]["transactions"]>
   export type transactionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    budgets?: boolean | transactions$budgetsArgs<ExtArgs>
     categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }
   export type transactionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    budgets?: boolean | transactions$budgetsArgs<ExtArgs>
     categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }
   export type transactionsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    budgets?: boolean | transactions$budgetsArgs<ExtArgs>
     categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }
@@ -3765,6 +3847,7 @@ export namespace Prisma {
   export type $transactionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "transactions"
     objects: {
+      budgets: Prisma.$budgetsPayload<ExtArgs> | null
       categories: Prisma.$categoriesPayload<ExtArgs>
       users: Prisma.$usersPayload<ExtArgs>
     }
@@ -3777,6 +3860,7 @@ export namespace Prisma {
       transaction_date: Date | null
       created_at: Date | null
       updated_at: Date | null
+      budget_id: number | null
     }, ExtArgs["result"]["transactions"]>
     composites: {}
   }
@@ -4171,6 +4255,7 @@ export namespace Prisma {
    */
   export interface Prisma__transactionsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    budgets<T extends transactions$budgetsArgs<ExtArgs> = {}>(args?: Subset<T, transactions$budgetsArgs<ExtArgs>>): Prisma__budgetsClient<$Result.GetResult<Prisma.$budgetsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     categories<T extends categoriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, categoriesDefaultArgs<ExtArgs>>): Prisma__categoriesClient<$Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     users<T extends usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, usersDefaultArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -4210,6 +4295,7 @@ export namespace Prisma {
     readonly transaction_date: FieldRef<"transactions", 'DateTime'>
     readonly created_at: FieldRef<"transactions", 'DateTime'>
     readonly updated_at: FieldRef<"transactions", 'DateTime'>
+    readonly budget_id: FieldRef<"transactions", 'Int'>
   }
     
 
@@ -4603,6 +4689,25 @@ export namespace Prisma {
      * Limit how many transactions to delete.
      */
     limit?: number
+  }
+
+  /**
+   * transactions.budgets
+   */
+  export type transactions$budgetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the budgets
+     */
+    select?: budgetsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the budgets
+     */
+    omit?: budgetsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: budgetsInclude<ExtArgs> | null
+    where?: budgetsWhereInput
   }
 
   /**
@@ -5830,7 +5935,8 @@ export namespace Prisma {
     description: 'description',
     transaction_date: 'transaction_date',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    budget_id: 'budget_id'
   };
 
   export type TransactionsScalarFieldEnum = (typeof TransactionsScalarFieldEnum)[keyof typeof TransactionsScalarFieldEnum]
@@ -5961,6 +6067,7 @@ export namespace Prisma {
     end_date?: DateTimeNullableFilter<"budgets"> | Date | string | null
     created_at?: DateTimeNullableFilter<"budgets"> | Date | string | null
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
+    transactions?: TransactionsListRelationFilter
   }
 
   export type budgetsOrderByWithRelationInput = {
@@ -5972,6 +6079,7 @@ export namespace Prisma {
     end_date?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     users?: usersOrderByWithRelationInput
+    transactions?: transactionsOrderByRelationAggregateInput
   }
 
   export type budgetsWhereUniqueInput = Prisma.AtLeast<{
@@ -5987,6 +6095,7 @@ export namespace Prisma {
     end_date?: DateTimeNullableFilter<"budgets"> | Date | string | null
     created_at?: DateTimeNullableFilter<"budgets"> | Date | string | null
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
+    transactions?: TransactionsListRelationFilter
   }, "budget_id" | "user_id_name">
 
   export type budgetsOrderByWithAggregationInput = {
@@ -6089,6 +6198,8 @@ export namespace Prisma {
     transaction_date?: DateTimeNullableFilter<"transactions"> | Date | string | null
     created_at?: DateTimeNullableFilter<"transactions"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"transactions"> | Date | string | null
+    budget_id?: IntNullableFilter<"transactions"> | number | null
+    budgets?: XOR<BudgetsNullableScalarRelationFilter, budgetsWhereInput> | null
     categories?: XOR<CategoriesScalarRelationFilter, categoriesWhereInput>
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
   }
@@ -6102,6 +6213,8 @@ export namespace Prisma {
     transaction_date?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
+    budget_id?: SortOrderInput | SortOrder
+    budgets?: budgetsOrderByWithRelationInput
     categories?: categoriesOrderByWithRelationInput
     users?: usersOrderByWithRelationInput
   }
@@ -6118,6 +6231,8 @@ export namespace Prisma {
     transaction_date?: DateTimeNullableFilter<"transactions"> | Date | string | null
     created_at?: DateTimeNullableFilter<"transactions"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"transactions"> | Date | string | null
+    budget_id?: IntNullableFilter<"transactions"> | number | null
+    budgets?: XOR<BudgetsNullableScalarRelationFilter, budgetsWhereInput> | null
     categories?: XOR<CategoriesScalarRelationFilter, categoriesWhereInput>
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
   }, "transaction_id">
@@ -6131,6 +6246,7 @@ export namespace Prisma {
     transaction_date?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
+    budget_id?: SortOrderInput | SortOrder
     _count?: transactionsCountOrderByAggregateInput
     _avg?: transactionsAvgOrderByAggregateInput
     _max?: transactionsMaxOrderByAggregateInput
@@ -6150,6 +6266,7 @@ export namespace Prisma {
     transaction_date?: DateTimeNullableWithAggregatesFilter<"transactions"> | Date | string | null
     created_at?: DateTimeNullableWithAggregatesFilter<"transactions"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"transactions"> | Date | string | null
+    budget_id?: IntNullableWithAggregatesFilter<"transactions"> | number | null
   }
 
   export type usersWhereInput = {
@@ -6222,6 +6339,7 @@ export namespace Prisma {
     end_date?: Date | string | null
     created_at?: Date | string | null
     users: usersCreateNestedOneWithoutBudgetsInput
+    transactions?: transactionsCreateNestedManyWithoutBudgetsInput
   }
 
   export type budgetsUncheckedCreateInput = {
@@ -6232,6 +6350,7 @@ export namespace Prisma {
     start_date?: Date | string | null
     end_date?: Date | string | null
     created_at?: Date | string | null
+    transactions?: transactionsUncheckedCreateNestedManyWithoutBudgetsInput
   }
 
   export type budgetsUpdateInput = {
@@ -6241,6 +6360,7 @@ export namespace Prisma {
     end_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: usersUpdateOneRequiredWithoutBudgetsNestedInput
+    transactions?: transactionsUpdateManyWithoutBudgetsNestedInput
   }
 
   export type budgetsUncheckedUpdateInput = {
@@ -6251,6 +6371,7 @@ export namespace Prisma {
     start_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     end_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactions?: transactionsUncheckedUpdateManyWithoutBudgetsNestedInput
   }
 
   export type budgetsCreateManyInput = {
@@ -6343,6 +6464,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budgets?: budgetsCreateNestedOneWithoutTransactionsInput
     categories: categoriesCreateNestedOneWithoutTransactionsInput
     users: usersCreateNestedOneWithoutTransactionsInput
   }
@@ -6356,6 +6478,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budget_id?: number | null
   }
 
   export type transactionsUpdateInput = {
@@ -6364,6 +6487,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budgets?: budgetsUpdateOneWithoutTransactionsNestedInput
     categories?: categoriesUpdateOneRequiredWithoutTransactionsNestedInput
     users?: usersUpdateOneRequiredWithoutTransactionsNestedInput
   }
@@ -6377,6 +6501,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budget_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type transactionsCreateManyInput = {
@@ -6388,6 +6513,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budget_id?: number | null
   }
 
   export type transactionsUpdateManyMutationInput = {
@@ -6407,6 +6533,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budget_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type usersCreateInput = {
@@ -6527,9 +6654,19 @@ export namespace Prisma {
     isNot?: usersWhereInput
   }
 
+  export type TransactionsListRelationFilter = {
+    every?: transactionsWhereInput
+    some?: transactionsWhereInput
+    none?: transactionsWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type transactionsOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type budgetsUser_idNameCompoundUniqueInput = {
@@ -6658,16 +6795,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type TransactionsListRelationFilter = {
-    every?: transactionsWhereInput
-    some?: transactionsWhereInput
-    none?: transactionsWhereInput
-  }
-
-  export type transactionsOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type categoriesCountOrderByAggregateInput = {
     category_id?: SortOrder
     user_id?: SortOrder
@@ -6720,6 +6847,22 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type BudgetsNullableScalarRelationFilter = {
+    is?: budgetsWhereInput | null
+    isNot?: budgetsWhereInput | null
+  }
+
   export type CategoriesScalarRelationFilter = {
     is?: categoriesWhereInput
     isNot?: categoriesWhereInput
@@ -6734,6 +6877,7 @@ export namespace Prisma {
     transaction_date?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    budget_id?: SortOrder
   }
 
   export type transactionsAvgOrderByAggregateInput = {
@@ -6741,6 +6885,7 @@ export namespace Prisma {
     user_id?: SortOrder
     category_id?: SortOrder
     amount?: SortOrder
+    budget_id?: SortOrder
   }
 
   export type transactionsMaxOrderByAggregateInput = {
@@ -6752,6 +6897,7 @@ export namespace Prisma {
     transaction_date?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    budget_id?: SortOrder
   }
 
   export type transactionsMinOrderByAggregateInput = {
@@ -6763,6 +6909,7 @@ export namespace Prisma {
     transaction_date?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    budget_id?: SortOrder
   }
 
   export type transactionsSumOrderByAggregateInput = {
@@ -6770,6 +6917,23 @@ export namespace Prisma {
     user_id?: SortOrder
     category_id?: SortOrder
     amount?: SortOrder
+    budget_id?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type BudgetsListRelationFilter = {
@@ -6830,6 +6994,20 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
+  export type transactionsCreateNestedManyWithoutBudgetsInput = {
+    create?: XOR<transactionsCreateWithoutBudgetsInput, transactionsUncheckedCreateWithoutBudgetsInput> | transactionsCreateWithoutBudgetsInput[] | transactionsUncheckedCreateWithoutBudgetsInput[]
+    connectOrCreate?: transactionsCreateOrConnectWithoutBudgetsInput | transactionsCreateOrConnectWithoutBudgetsInput[]
+    createMany?: transactionsCreateManyBudgetsInputEnvelope
+    connect?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+  }
+
+  export type transactionsUncheckedCreateNestedManyWithoutBudgetsInput = {
+    create?: XOR<transactionsCreateWithoutBudgetsInput, transactionsUncheckedCreateWithoutBudgetsInput> | transactionsCreateWithoutBudgetsInput[] | transactionsUncheckedCreateWithoutBudgetsInput[]
+    connectOrCreate?: transactionsCreateOrConnectWithoutBudgetsInput | transactionsCreateOrConnectWithoutBudgetsInput[]
+    createMany?: transactionsCreateManyBudgetsInputEnvelope
+    connect?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -6854,12 +7032,40 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutBudgetsInput, usersUpdateWithoutBudgetsInput>, usersUncheckedUpdateWithoutBudgetsInput>
   }
 
+  export type transactionsUpdateManyWithoutBudgetsNestedInput = {
+    create?: XOR<transactionsCreateWithoutBudgetsInput, transactionsUncheckedCreateWithoutBudgetsInput> | transactionsCreateWithoutBudgetsInput[] | transactionsUncheckedCreateWithoutBudgetsInput[]
+    connectOrCreate?: transactionsCreateOrConnectWithoutBudgetsInput | transactionsCreateOrConnectWithoutBudgetsInput[]
+    upsert?: transactionsUpsertWithWhereUniqueWithoutBudgetsInput | transactionsUpsertWithWhereUniqueWithoutBudgetsInput[]
+    createMany?: transactionsCreateManyBudgetsInputEnvelope
+    set?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+    disconnect?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+    delete?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+    connect?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+    update?: transactionsUpdateWithWhereUniqueWithoutBudgetsInput | transactionsUpdateWithWhereUniqueWithoutBudgetsInput[]
+    updateMany?: transactionsUpdateManyWithWhereWithoutBudgetsInput | transactionsUpdateManyWithWhereWithoutBudgetsInput[]
+    deleteMany?: transactionsScalarWhereInput | transactionsScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type transactionsUncheckedUpdateManyWithoutBudgetsNestedInput = {
+    create?: XOR<transactionsCreateWithoutBudgetsInput, transactionsUncheckedCreateWithoutBudgetsInput> | transactionsCreateWithoutBudgetsInput[] | transactionsUncheckedCreateWithoutBudgetsInput[]
+    connectOrCreate?: transactionsCreateOrConnectWithoutBudgetsInput | transactionsCreateOrConnectWithoutBudgetsInput[]
+    upsert?: transactionsUpsertWithWhereUniqueWithoutBudgetsInput | transactionsUpsertWithWhereUniqueWithoutBudgetsInput[]
+    createMany?: transactionsCreateManyBudgetsInputEnvelope
+    set?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+    disconnect?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+    delete?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+    connect?: transactionsWhereUniqueInput | transactionsWhereUniqueInput[]
+    update?: transactionsUpdateWithWhereUniqueWithoutBudgetsInput | transactionsUpdateWithWhereUniqueWithoutBudgetsInput[]
+    updateMany?: transactionsUpdateManyWithWhereWithoutBudgetsInput | transactionsUpdateManyWithWhereWithoutBudgetsInput[]
+    deleteMany?: transactionsScalarWhereInput | transactionsScalarWhereInput[]
   }
 
   export type usersCreateNestedOneWithoutCategoriesInput = {
@@ -6922,6 +7128,12 @@ export namespace Prisma {
     deleteMany?: transactionsScalarWhereInput | transactionsScalarWhereInput[]
   }
 
+  export type budgetsCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<budgetsCreateWithoutTransactionsInput, budgetsUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: budgetsCreateOrConnectWithoutTransactionsInput
+    connect?: budgetsWhereUniqueInput
+  }
+
   export type categoriesCreateNestedOneWithoutTransactionsInput = {
     create?: XOR<categoriesCreateWithoutTransactionsInput, categoriesUncheckedCreateWithoutTransactionsInput>
     connectOrCreate?: categoriesCreateOrConnectWithoutTransactionsInput
@@ -6932,6 +7144,16 @@ export namespace Prisma {
     create?: XOR<usersCreateWithoutTransactionsInput, usersUncheckedCreateWithoutTransactionsInput>
     connectOrCreate?: usersCreateOrConnectWithoutTransactionsInput
     connect?: usersWhereUniqueInput
+  }
+
+  export type budgetsUpdateOneWithoutTransactionsNestedInput = {
+    create?: XOR<budgetsCreateWithoutTransactionsInput, budgetsUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: budgetsCreateOrConnectWithoutTransactionsInput
+    upsert?: budgetsUpsertWithoutTransactionsInput
+    disconnect?: budgetsWhereInput | boolean
+    delete?: budgetsWhereInput | boolean
+    connect?: budgetsWhereUniqueInput
+    update?: XOR<XOR<budgetsUpdateToOneWithWhereWithoutTransactionsInput, budgetsUpdateWithoutTransactionsInput>, budgetsUncheckedUpdateWithoutTransactionsInput>
   }
 
   export type categoriesUpdateOneRequiredWithoutTransactionsNestedInput = {
@@ -6948,6 +7170,14 @@ export namespace Prisma {
     upsert?: usersUpsertWithoutTransactionsInput
     connect?: usersWhereUniqueInput
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutTransactionsInput, usersUpdateWithoutTransactionsInput>, usersUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type budgetsCreateNestedManyWithoutUsersInput = {
@@ -7239,6 +7469,33 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type usersCreateWithoutBudgetsInput = {
     email: string
     password: string
@@ -7261,6 +7518,37 @@ export namespace Prisma {
   export type usersCreateOrConnectWithoutBudgetsInput = {
     where: usersWhereUniqueInput
     create: XOR<usersCreateWithoutBudgetsInput, usersUncheckedCreateWithoutBudgetsInput>
+  }
+
+  export type transactionsCreateWithoutBudgetsInput = {
+    amount: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    transaction_date?: Date | string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    categories: categoriesCreateNestedOneWithoutTransactionsInput
+    users: usersCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type transactionsUncheckedCreateWithoutBudgetsInput = {
+    transaction_id?: number
+    user_id: number
+    category_id: number
+    amount: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    transaction_date?: Date | string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type transactionsCreateOrConnectWithoutBudgetsInput = {
+    where: transactionsWhereUniqueInput
+    create: XOR<transactionsCreateWithoutBudgetsInput, transactionsUncheckedCreateWithoutBudgetsInput>
+  }
+
+  export type transactionsCreateManyBudgetsInputEnvelope = {
+    data: transactionsCreateManyBudgetsInput | transactionsCreateManyBudgetsInput[]
+    skipDuplicates?: boolean
   }
 
   export type usersUpsertWithoutBudgetsInput = {
@@ -7293,6 +7581,37 @@ export namespace Prisma {
     transactions?: transactionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
+  export type transactionsUpsertWithWhereUniqueWithoutBudgetsInput = {
+    where: transactionsWhereUniqueInput
+    update: XOR<transactionsUpdateWithoutBudgetsInput, transactionsUncheckedUpdateWithoutBudgetsInput>
+    create: XOR<transactionsCreateWithoutBudgetsInput, transactionsUncheckedCreateWithoutBudgetsInput>
+  }
+
+  export type transactionsUpdateWithWhereUniqueWithoutBudgetsInput = {
+    where: transactionsWhereUniqueInput
+    data: XOR<transactionsUpdateWithoutBudgetsInput, transactionsUncheckedUpdateWithoutBudgetsInput>
+  }
+
+  export type transactionsUpdateManyWithWhereWithoutBudgetsInput = {
+    where: transactionsScalarWhereInput
+    data: XOR<transactionsUpdateManyMutationInput, transactionsUncheckedUpdateManyWithoutBudgetsInput>
+  }
+
+  export type transactionsScalarWhereInput = {
+    AND?: transactionsScalarWhereInput | transactionsScalarWhereInput[]
+    OR?: transactionsScalarWhereInput[]
+    NOT?: transactionsScalarWhereInput | transactionsScalarWhereInput[]
+    transaction_id?: IntFilter<"transactions"> | number
+    user_id?: IntFilter<"transactions"> | number
+    category_id?: IntFilter<"transactions"> | number
+    amount?: DecimalFilter<"transactions"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableFilter<"transactions"> | string | null
+    transaction_date?: DateTimeNullableFilter<"transactions"> | Date | string | null
+    created_at?: DateTimeNullableFilter<"transactions"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"transactions"> | Date | string | null
+    budget_id?: IntNullableFilter<"transactions"> | number | null
+  }
+
   export type usersCreateWithoutCategoriesInput = {
     email: string
     password: string
@@ -7323,6 +7642,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budgets?: budgetsCreateNestedOneWithoutTransactionsInput
     users: usersCreateNestedOneWithoutTransactionsInput
   }
 
@@ -7334,6 +7654,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budget_id?: number | null
   }
 
   export type transactionsCreateOrConnectWithoutCategoriesInput = {
@@ -7392,18 +7713,28 @@ export namespace Prisma {
     data: XOR<transactionsUpdateManyMutationInput, transactionsUncheckedUpdateManyWithoutCategoriesInput>
   }
 
-  export type transactionsScalarWhereInput = {
-    AND?: transactionsScalarWhereInput | transactionsScalarWhereInput[]
-    OR?: transactionsScalarWhereInput[]
-    NOT?: transactionsScalarWhereInput | transactionsScalarWhereInput[]
-    transaction_id?: IntFilter<"transactions"> | number
-    user_id?: IntFilter<"transactions"> | number
-    category_id?: IntFilter<"transactions"> | number
-    amount?: DecimalFilter<"transactions"> | Decimal | DecimalJsLike | number | string
-    description?: StringNullableFilter<"transactions"> | string | null
-    transaction_date?: DateTimeNullableFilter<"transactions"> | Date | string | null
-    created_at?: DateTimeNullableFilter<"transactions"> | Date | string | null
-    updated_at?: DateTimeNullableFilter<"transactions"> | Date | string | null
+  export type budgetsCreateWithoutTransactionsInput = {
+    name: string
+    amount: Decimal | DecimalJsLike | number | string
+    start_date?: Date | string | null
+    end_date?: Date | string | null
+    created_at?: Date | string | null
+    users: usersCreateNestedOneWithoutBudgetsInput
+  }
+
+  export type budgetsUncheckedCreateWithoutTransactionsInput = {
+    budget_id?: number
+    user_id: number
+    name: string
+    amount: Decimal | DecimalJsLike | number | string
+    start_date?: Date | string | null
+    end_date?: Date | string | null
+    created_at?: Date | string | null
+  }
+
+  export type budgetsCreateOrConnectWithoutTransactionsInput = {
+    where: budgetsWhereUniqueInput
+    create: XOR<budgetsCreateWithoutTransactionsInput, budgetsUncheckedCreateWithoutTransactionsInput>
   }
 
   export type categoriesCreateWithoutTransactionsInput = {
@@ -7448,6 +7779,36 @@ export namespace Prisma {
   export type usersCreateOrConnectWithoutTransactionsInput = {
     where: usersWhereUniqueInput
     create: XOR<usersCreateWithoutTransactionsInput, usersUncheckedCreateWithoutTransactionsInput>
+  }
+
+  export type budgetsUpsertWithoutTransactionsInput = {
+    update: XOR<budgetsUpdateWithoutTransactionsInput, budgetsUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<budgetsCreateWithoutTransactionsInput, budgetsUncheckedCreateWithoutTransactionsInput>
+    where?: budgetsWhereInput
+  }
+
+  export type budgetsUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: budgetsWhereInput
+    data: XOR<budgetsUpdateWithoutTransactionsInput, budgetsUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type budgetsUpdateWithoutTransactionsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    start_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    end_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    users?: usersUpdateOneRequiredWithoutBudgetsNestedInput
+  }
+
+  export type budgetsUncheckedUpdateWithoutTransactionsInput = {
+    budget_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    start_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    end_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type categoriesUpsertWithoutTransactionsInput = {
@@ -7512,6 +7873,7 @@ export namespace Prisma {
     start_date?: Date | string | null
     end_date?: Date | string | null
     created_at?: Date | string | null
+    transactions?: transactionsCreateNestedManyWithoutBudgetsInput
   }
 
   export type budgetsUncheckedCreateWithoutUsersInput = {
@@ -7521,6 +7883,7 @@ export namespace Prisma {
     start_date?: Date | string | null
     end_date?: Date | string | null
     created_at?: Date | string | null
+    transactions?: transactionsUncheckedCreateNestedManyWithoutBudgetsInput
   }
 
   export type budgetsCreateOrConnectWithoutUsersInput = {
@@ -7564,6 +7927,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budgets?: budgetsCreateNestedOneWithoutTransactionsInput
     categories: categoriesCreateNestedOneWithoutTransactionsInput
   }
 
@@ -7575,6 +7939,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budget_id?: number | null
   }
 
   export type transactionsCreateOrConnectWithoutUsersInput = {
@@ -7659,6 +8024,49 @@ export namespace Prisma {
     data: XOR<transactionsUpdateManyMutationInput, transactionsUncheckedUpdateManyWithoutUsersInput>
   }
 
+  export type transactionsCreateManyBudgetsInput = {
+    transaction_id?: number
+    user_id: number
+    category_id: number
+    amount: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    transaction_date?: Date | string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type transactionsUpdateWithoutBudgetsInput = {
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: categoriesUpdateOneRequiredWithoutTransactionsNestedInput
+    users?: usersUpdateOneRequiredWithoutTransactionsNestedInput
+  }
+
+  export type transactionsUncheckedUpdateWithoutBudgetsInput = {
+    transaction_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    category_id?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type transactionsUncheckedUpdateManyWithoutBudgetsInput = {
+    transaction_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    category_id?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type transactionsCreateManyCategoriesInput = {
     transaction_id?: number
     user_id: number
@@ -7667,6 +8075,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budget_id?: number | null
   }
 
   export type transactionsUpdateWithoutCategoriesInput = {
@@ -7675,6 +8084,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budgets?: budgetsUpdateOneWithoutTransactionsNestedInput
     users?: usersUpdateOneRequiredWithoutTransactionsNestedInput
   }
 
@@ -7686,6 +8096,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budget_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type transactionsUncheckedUpdateManyWithoutCategoriesInput = {
@@ -7696,6 +8107,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budget_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type budgetsCreateManyUsersInput = {
@@ -7722,6 +8134,7 @@ export namespace Prisma {
     transaction_date?: Date | string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    budget_id?: number | null
   }
 
   export type budgetsUpdateWithoutUsersInput = {
@@ -7730,6 +8143,7 @@ export namespace Prisma {
     start_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     end_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactions?: transactionsUpdateManyWithoutBudgetsNestedInput
   }
 
   export type budgetsUncheckedUpdateWithoutUsersInput = {
@@ -7739,6 +8153,7 @@ export namespace Prisma {
     start_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     end_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactions?: transactionsUncheckedUpdateManyWithoutBudgetsNestedInput
   }
 
   export type budgetsUncheckedUpdateManyWithoutUsersInput = {
@@ -7778,6 +8193,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budgets?: budgetsUpdateOneWithoutTransactionsNestedInput
     categories?: categoriesUpdateOneRequiredWithoutTransactionsNestedInput
   }
 
@@ -7789,6 +8205,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budget_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type transactionsUncheckedUpdateManyWithoutUsersInput = {
@@ -7799,6 +8216,7 @@ export namespace Prisma {
     transaction_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budget_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 

@@ -91,8 +91,10 @@ export default async function Dashboard() {
                       ${remaining.toFixed(2)} Remaining
                     </div>
                   </div>
-
-                  <Link href="/addtransaction" className="btn btn-primary mt-4">
+                  <Link
+                    href={`/addtransaction?budget_id=${budget.budget_id}`}
+                    className="btn btn-primary mt-4"
+                  >
                     Add Transaction
                   </Link>
                 </div>
