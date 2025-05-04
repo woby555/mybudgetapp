@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import "../globals.css";
-import Link from "next/link";
+import { useSession, signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -10,29 +12,21 @@ export default function Login() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Login failed');
-      } else {
-        setSuccess('Login successful!');
-        // Optionally redirect or store JWT/token here
-        // e.g., router.push('/dashboard')
-      }
-    } catch (err) {
-      setError('Something went wrong');
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+    if (res?.error) {
+      setError(res.error);
+    } else {
+      setSuccess("Login successful!");
+      router.push("/dashboard"); // Redirect to dashboard or any other page
     }
   };
 
