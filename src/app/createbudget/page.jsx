@@ -2,33 +2,46 @@
 
 import { useState } from 'react';
 import "../globals.css";
-import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-
 export default function CreateBudget() {
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [name, setName] = useState('');
-    const [amount, setAmount] = useState('');
-    const [start_date, setStartDate] = useState('');
-    const [end_date, setEndDate] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [name, setName] = useState('');
+  const [amount, setAmount] = useState('');
+  const [start_date, setStartDate] = useState('');
+  const [end_date, setEndDate] = useState('');
 
   const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    // const res = await signIn("credentials", {
-    //   redirect: false,
-    //   email,
-    //   password,
-    // });
-    if (res?.error) {
-      setError(res.error);
-    } else {
-      setSuccess("Added budget!");
-      router.push("/dashboard"); // Redirect to dashboard or any other page
+
+    try {
+      const res = await fetch('/api/budgets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          amount: parseFloat(amount),
+          start_date,
+          end_date,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Failed to create budget');
+      } else {
+        setSuccess('Added budget!');
+        setTimeout(() => router.push('/dashboard'), 1500);
+      }
+    } catch (err) {
+      setError('An error occurred while submitting the form');
+      console.error(err);
     }
   };
 
@@ -93,7 +106,7 @@ export default function CreateBudget() {
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Login
+            Create Budget
           </button>
         </form>
       </div>
