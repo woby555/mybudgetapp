@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import "../globals.css";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import BudgetCard from "../components/budgetcard";
 
 export default function CreateBudget() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [transaction_date, setTransactionDate] = useState("");
@@ -17,6 +17,8 @@ export default function CreateBudget() {
   const searchParams = useSearchParams();
   const budget_id = searchParams.get("budget_id");
 
+  const [budgetData, setBudgetData] = useState(null);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -24,18 +26,33 @@ export default function CreateBudget() {
       try {
         const res = await fetch("/api/getcategories");
         const data = await res.json();
-
-        if (res.ok) {
-          setCategories(data);
-        } else {
-          console.error("Failed to fetch categories");
-        }
+        if (res.ok) setCategories(data);
       } catch (err) {
-        console.error("An error occurred while fetching categories", err);
+        console.error("Error fetching categories:", err);
       }
     };
+
+    const fetchBudget = async () => {
+      if (!budget_id) return;
+      try {
+        const res = await fetch(`/api/gettransactionbudget?budget_id=${budget_id}`);
+    
+        const text = await res.text();
+        if (!res.ok) {
+          console.error("Budget fetch failed:", text);
+          return;
+        }
+    
+        const data = JSON.parse(text);
+        setBudgetData(data);
+      } catch (err) {
+        console.error("Error fetching budget:", err);
+      }
+    };
+
     fetchCategories();
-  }, []);
+    fetchBudget();
+  }, [budget_id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,7 +75,7 @@ export default function CreateBudget() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Failed to create budget");
+        setError(data.error || "Failed to create transaction");
       } else {
         setSuccess("Added transaction!");
         setTimeout(() => router.push("/dashboard"), 1500);
@@ -70,7 +87,7 @@ export default function CreateBudget() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex flex-row gap-12 min-h-screen bg-gray-100 px-4 py-8">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md border-3 border-gray-300 mb-80">
         <h2 className="text-2xl font-bold mb-6 text-black text-center">
           Add a transaction:
@@ -147,6 +164,12 @@ export default function CreateBudget() {
           </button>
         </form>
       </div>
+
+            {budgetData && (
+        <div className="w-full max-w-4xl mb-8">
+          <BudgetCard budget={budgetData.budget} transactions={budgetData.transactions} />
+        </div>
+      )}
     </div>
   );
 }
