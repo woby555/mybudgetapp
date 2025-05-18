@@ -3,7 +3,7 @@
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 import dynamic from 'next/dynamic';
 
-const COLORS = ['#3b82f6', '#60a5fa']; // Blue shades
+const COLORS = ['#FC454E', '#60a5fa']; // Blue shades
 
 export default function BudgetPieChart({ spent, remaining }) {
   const data = [
