@@ -1,3 +1,5 @@
+
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -54,16 +56,18 @@ export default function BudgetCard({ budget, transactions }) {
   return (
     <>
       <div className="justify-center mb-4 text-base-content">
-        <div className="max-w-6xl bg-white p-8 rounded-lg shadow-md border-3 border-gray-400 relative">
+        <div className="relative max-w-6xl p-8 bg-white border-gray-400 rounded-lg shadow-md border-3">
           <div>
-            <div className="text-lg font-bold text-gray-500 text-underline">
+            <Link href={`/viewbudget?budget_id=${budget.budget_id}`}>
+            <div className="px-0 text-lg font-bold text-gray-500 underline text-underline">
               {budget.name}
             </div>
-            <div className="text-3xl font-bold mb-2">${budget.amount}</div>
+            </Link>
+            <div className="mb-2 text-3xl font-bold">${budget.amount}</div>
 
             <Link
                 href={`/addtransaction?budget_id=${budget.budget_id}`}
-                className="btn btn-primary mt-4">
+                className="mt-4 btn btn-primary">
                 Add Transaction
               </Link>
             <div className="flex items-center justify-between mt-4">
@@ -84,8 +88,8 @@ export default function BudgetCard({ budget, transactions }) {
             </div>
 
             {/* Transaction List Section */}
-            <div className="flex-1 bg-white p-4 rounded-lg shadow-lg border border-gray-300">
-              <h3 className="text-lg font-semibold mb-2">Transactions</h3>
+            <div className="flex-1 p-4 bg-white border border-gray-300 rounded-lg shadow-lg">
+              <h3 className="mb-2 text-lg font-semibold">Transactions</h3>
               <ul className="space-y-2">
                 {budgetTransactions.length > 0 ? (
                   budgetTransactions.map((tx, index) => (
@@ -93,22 +97,22 @@ export default function BudgetCard({ budget, transactions }) {
                       key={
                         tx.transaction_id || `${tx.transaction_date}-${index}`
                       }
-                      className="text-sm p-2 border-b relative">
-                      <div className="flex justify-between items-center">
+                      className="relative p-2 text-sm border-b">
+                      <div className="flex items-center justify-between">
                         <div>
-                          <div className="text-gray-900 font-medium">
+                          <div className="font-medium text-gray-900">
                             ${tx.amount}
                           </div>
-                          <div className="text-gray-600 mt-1">
+                          <div className="mt-1 text-gray-600">
                             {tx.description}
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-gray-500 text-sm">
-                            {new Date(tx.transaction_date).toLocaleDateString()}
+                          <div className="text-sm text-gray-500">
+                          {new Date(tx.transaction_date).toISOString().split("T")[0]}
                           </div>
                           <button
-                            className="text-red-500 hover:text-red-700 text-sm font-bold"
+                            className="text-sm font-bold text-red-500 hover:text-red-700"
                             onClick={() => setDeleteTarget(tx)}
                             title="Delete">
                             ✕
@@ -132,7 +136,7 @@ export default function BudgetCard({ budget, transactions }) {
       {deleteTarget && (
         <dialog id="delete_modal" className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Confirm Deletion</h3>
+            <h3 className="text-lg font-bold">Confirm Deletion</h3>
             <p className="py-4">
               Are you sure you want to delete the transaction "
               <span className="font-semibold">{deleteTarget.description}</span>"

@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from "react";
 
-export default function EditableTransactionsTable({ initialTransactions, refetchTransactions }) {
+export default function EditableTransactionsTable({
+  initialTransactions,
+  refetchTransactions,
+  categories,
+}) {
   const [transactions, setTransactions] = useState(initialTransactions || []);
   const [editedTransactions, setEditedTransactions] = useState({});
   const [isSaving, setIsSaving] = useState(false);
@@ -83,7 +87,9 @@ export default function EditableTransactionsTable({ initialTransactions, refetch
                   <input
                     type="text"
                     value={tx.description}
-                    onChange={(e) => handleChange(index, "description", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "description", e.target.value)
+                    }
                     className="input input-bordered w-full"
                   />
                 </td>
@@ -91,20 +97,32 @@ export default function EditableTransactionsTable({ initialTransactions, refetch
                   <input
                     type="number"
                     value={tx.amount}
-                    onChange={(e) => handleChange(index, "amount", e.target.value)}
-                    className="input input-bordered w-full"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={tx.categories?.name || ""}
                     onChange={(e) =>
-                      handleChange(index, "category_name", e.target.value)
+                      handleChange(index, "amount", e.target.value)
                     }
                     className="input input-bordered w-full"
                   />
                 </td>
+                <td>
+                  <select
+                    value={tx.category_id || ""}
+                    onChange={(e) =>
+                      handleChange(
+                        index,
+                        "category_id",
+                        parseInt(e.target.value)
+                      )
+                    }
+                    className="select select-bordered w-full">
+                    <option value="">Select Category</option>
+                    {categories.map((cat) => (
+                      <option key={cat.category_id} value={cat.category_id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+
                 <td>
                   <input
                     type="date"
@@ -125,8 +143,7 @@ export default function EditableTransactionsTable({ initialTransactions, refetch
         <button
           onClick={handleSave}
           className="btn btn-primary"
-          disabled={isSaving}
-        >
+          disabled={isSaving}>
           {isSaving ? "Saving..." : "Save Changes"}
         </button>
         {message && <p className="text-sm text-gray-600">{message}</p>}

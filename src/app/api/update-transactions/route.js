@@ -52,6 +52,7 @@ export async function PUT(req) {
           amount: parseFloat(amount),
           transaction_date: new Date(transaction_date),
           category_id: final_category_id,
+          updated_at: new Date(),
         },
       });
 
