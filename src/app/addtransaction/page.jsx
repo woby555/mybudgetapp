@@ -87,15 +87,15 @@ export default function CreateBudget() {
   };
 
   return (
-    <div className="flex flex-row gap-12 min-h-screen bg-gray-100 px-4 py-8">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md border-3 border-gray-300 mb-80">
-        <h2 className="text-2xl font-bold mb-6 text-black text-center">
+    <div className="flex flex-row min-h-screen gap-12 px-4 py-8 bg-gray-100">
+      <div className="w-full max-w-md p-8 bg-white border-gray-300 rounded-lg shadow-md border-3 mb-80">
+        <h2 className="mb-6 text-2xl font-bold text-center text-black">
           Add a transaction:
         </h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block mb-2 text-sm font-bold text-black">
               Amount:
             </label>
             <input
@@ -104,19 +104,19 @@ export default function CreateBudget() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+              className="w-full px-3 py-2 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block mb-2 text-sm font-bold text-black">
               Category:
             </label>
             <select
               name="category"
               onChange={(e) => setCategory(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black">
+              className="w-full px-3 py-2 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="">Select a category</option>
               {categories.map((category) => (
                 <option key={category.category_id} value={category.category_id}>
@@ -127,7 +127,7 @@ export default function CreateBudget() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block mb-2 text-sm font-bold text-black">
               Description:
             </label>
             <input
@@ -136,12 +136,12 @@ export default function CreateBudget() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+              className="w-full px-3 py-2 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div className="mb-6">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block mb-2 text-sm font-bold text-black">
               Starting day:
             </label>
             <input
@@ -150,16 +150,16 @@ export default function CreateBudget() {
               value={transaction_date}
               onChange={(e) => setTransactionDate(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+              className="w-full px-3 py-2 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          {success && <p className="text-green-500 mb-4">{success}</p>}
+          {error && <p className="mb-4 text-red-500">{error}</p>}
+          {success && <p className="mb-4 text-green-500">{success}</p>}
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
             Add Transaction
           </button>
         </form>

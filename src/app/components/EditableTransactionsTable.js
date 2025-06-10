@@ -66,10 +66,10 @@ export default function EditableTransactionsTable({
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">Transactions</h3>
+      <h3 className="mb-2 text-lg font-semibold">Transactions</h3>
 
       <div className="overflow-x-auto">
-        <table className="table w-full bg-white shadow rounded">
+        <table className="table w-full bg-white rounded shadow">
           <thead>
             <tr>
               <th>#</th>
@@ -90,7 +90,7 @@ export default function EditableTransactionsTable({
                     onChange={(e) =>
                       handleChange(index, "description", e.target.value)
                     }
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                   />
                 </td>
                 <td>
@@ -100,7 +100,7 @@ export default function EditableTransactionsTable({
                     onChange={(e) =>
                       handleChange(index, "amount", e.target.value)
                     }
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                   />
                 </td>
                 <td>
@@ -113,7 +113,7 @@ export default function EditableTransactionsTable({
                         parseInt(e.target.value)
                       )
                     }
-                    className="select select-bordered w-full">
+                    className="w-full select select-bordered">
                     <option value="">Select Category</option>
                     {categories.map((cat) => (
                       <option key={cat.category_id} value={cat.category_id}>
@@ -130,7 +130,7 @@ export default function EditableTransactionsTable({
                     onChange={(e) =>
                       handleChange(index, "transaction_date", e.target.value)
                     }
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                   />
                 </td>
               </tr>
@@ -139,7 +139,7 @@ export default function EditableTransactionsTable({
         </table>
       </div>
 
-      <div className="mt-4 flex items-center gap-4">
+      <div className="flex items-center gap-4 mt-4">
         <button
           onClick={handleSave}
           className="btn btn-primary"

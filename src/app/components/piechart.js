@@ -12,7 +12,7 @@ export default function BudgetPieChart({ spent, remaining }) {
   ];
 
   return (
-    <div className="flex justify-left mt-2">
+    <div className="flex mt-2 justify-left">
       <PieChart width={250} height={250}>
         <Pie
           data={data}

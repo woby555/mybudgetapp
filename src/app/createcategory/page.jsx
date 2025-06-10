@@ -39,43 +39,43 @@ export default function CreateCategory() {
   };
 
 return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md border-3 border-gray-300 mb-80">
-            <h2 className="text-2xl font-bold mb-6 text-black text-center">Create a category:</h2>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="w-full max-w-md p-8 bg-white border-gray-300 rounded-lg shadow-md border-3 mb-80">
+            <h2 className="mb-6 text-2xl font-bold text-center text-black">Create a category:</h2>
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label className="block text-black text-sm font-bold mb-2">Name of budget:</label>
+                    <label className="block mb-2 text-sm font-bold text-black">Name of budget:</label>
                     <input
                         type="text"
                         name="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
-                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                        className="w-full px-3 py-2 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-black text-sm font-bold mb-2">Type:</label>
+                    <label className="block mb-2 text-sm font-bold text-black">Type:</label>
                     <select
                         name="type"
                         value={type}
                         onChange={(e) => setType(e.target.value)}
                         required
-                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                        className="w-full px-3 py-2 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="income">Income</option>
                         <option value="expense">Expense</option>
                     </select>
                 </div>
 
-                {error && <p className="text-red-500 mb-4">{error}</p>}
-                {success && <p className="text-green-500 mb-4">{success}</p>}
+                {error && <p className="mb-4 text-red-500">{error}</p>}
+                {success && <p className="mb-4 text-green-500">{success}</p>}
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     Submit
                 </button>
