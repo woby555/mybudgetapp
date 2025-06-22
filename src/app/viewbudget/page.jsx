@@ -149,6 +149,7 @@ export default function ViewBudget() {
               initialTransactions={budgetData.transactions}
               categories={categories}
               refetchTransactions={fetchBudget}
+              budget_id={parseInt(budget_id)}
             />
           </div>
         </>

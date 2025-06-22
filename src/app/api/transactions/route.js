@@ -1,39 +1,81 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/app/lib/prisma";
-import { parse } from "path";
 
 export async function POST(req) {
-    const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-    if (!session) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+  if (!session) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+  }
+
+  try {
+    const body = await req.json();
+    const {
+      amount,
+      transaction_date,
+      category_id,
+      budget_id,
+      description,
+    } = body;
+
+    // Validate required fields
+    if (
+      amount === undefined ||
+      !transaction_date ||
+      !category_id ||
+      !budget_id ||
+      description === undefined
+    ) {
+      return new Response(
+        JSON.stringify({ error: "Missing one or more required fields" }),
+        { status: 400 }
+      );
     }
 
-    const {amount, transaction_date, category_id, budget_id, description } = await req.json();
+    // Validate types
+    const parsedAmount = parseFloat(amount);
+    const parsedCategoryId = parseInt(category_id);
+    const parsedBudgetId = parseInt(budget_id);
+    const parsedDate = new Date(transaction_date);
 
-    if (!amount || !transaction_date || !category_id || !budget_id || !description) {
-        const errorResponse = { error: "Missing required fields" };
-        console.log("Response JSON:", errorResponse); // Log the JSON object
-        return new Response(JSON.stringify(errorResponse), { status: 400 });
+    if (isNaN(parsedAmount) || parsedAmount < 0) {
+      return new Response(JSON.stringify({ error: "Invalid amount" }), { status: 400 });
     }
-    
-    try {
-        const newTransaction = await prisma.transactions.create({
-            data: {
-                amount: parseFloat(amount),
-                transaction_date: new Date(transaction_date),
-                category_id: parseInt(category_id),
-                user_id: parseInt(session.user.id),
-                description: description,
-                created_at: new Date().toISOString(), 
-                updated_at: new Date().toISOString(),
-                budget_id: parseInt(budget_id),
-            },
-        });
-        return new Response(JSON.stringify(newTransaction), { status: 201 });
-    } catch (error) {
-        console.error("Error creating transaction:", error);
-        return new Response(JSON.stringify({ error: "Failed to create transaction" }), { status: 500 });
+
+    if (isNaN(parsedCategoryId)) {
+      return new Response(JSON.stringify({ error: "Invalid category_id" }), { status: 400 });
     }
+
+    if (isNaN(parsedBudgetId)) {
+      return new Response(JSON.stringify({ error: "Invalid budget_id" }), { status: 400 });
+    }
+
+    if (isNaN(parsedDate.getTime())) {
+      return new Response(JSON.stringify({ error: "Invalid transaction_date" }), { status: 400 });
+    }
+
+    const newTransaction = await prisma.transactions.create({
+      data: {
+        amount: parsedAmount,
+        transaction_date: parsedDate,
+        category_id: parsedCategoryId,
+        budget_id: parsedBudgetId,
+        user_id: parseInt(session.user.id),
+        description,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    });
+
+    return new Response(JSON.stringify(newTransaction), { status: 201 });
+  } catch (error) {
+    console.error("Error creating transaction:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to create transaction" }),
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
 }

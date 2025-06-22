@@ -2,13 +2,17 @@
 
 import { useState, useEffect } from "react";
 
+let newRowCounter = 0;
+
 export default function EditableTransactionsTable({
   initialTransactions,
   refetchTransactions,
   categories,
+  budget_id,
 }) {
   const [transactions, setTransactions] = useState(initialTransactions || []);
   const [editedTransactions, setEditedTransactions] = useState({});
+  const [deletedTransactionIds, setDeletedTransactionIds] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -21,15 +25,62 @@ export default function EditableTransactionsTable({
     updated[index][field] = value;
     setTransactions(updated);
 
-    // Track edits
+    const id = updated[index].transaction_id;
+
+    // ✅ Ensure budget_id is inside the transaction object
     setEditedTransactions((prev) => ({
       ...prev,
-      [updated[index].transaction_id]: updated[index],
+      [id]: {
+        ...updated[index],
+        budget_id: updated[index].budget_id ?? budget_id,
+      },
+    }));
+
+    console.log("Edited transaction:", {
+      ...updated[index],
+      budget_id: updated[index].budget_id ?? budget_id,
+    });
+  };
+
+  const handleAddRow = () => {
+    const newTransaction = {
+      transaction_id: `new-${++newRowCounter}`,
+      description: "",
+      amount: "",
+      category_id: "",
+      transaction_date: "",
+      budget_id: budget_id, // ✅ Assign upfront
+    };
+
+    setTransactions((prev) => [...prev, newTransaction]);
+
+    // Track immediately in editedTransactions
+    setEditedTransactions((prev) => ({
+      ...prev,
+      [newTransaction.transaction_id]: newTransaction,
     }));
   };
 
+  const handleDeleteRow = (index) => {
+    const tx = transactions[index];
+
+    if (typeof tx.transaction_id === "number") {
+      setDeletedTransactionIds((prev) => [...prev, tx.transaction_id]);
+    }
+
+    setTransactions((prev) => prev.filter((_, i) => i !== index));
+    setEditedTransactions((prev) => {
+      const updated = { ...prev };
+      delete updated[tx.transaction_id];
+      return updated;
+    });
+  };
+
   const handleSave = async () => {
-    if (Object.keys(editedTransactions).length === 0) {
+    if (
+      Object.keys(editedTransactions).length === 0 &&
+      deletedTransactionIds.length === 0
+    ) {
       setMessage("No changes to save.");
       return;
     }
@@ -38,21 +89,63 @@ export default function EditableTransactionsTable({
     setMessage(null);
 
     try {
-      const res = await fetch("/api/update-transactions", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          transactions: Object.values(editedTransactions),
-        }),
+      const newTxs = [];
+      const existingTxs = [];
+
+      Object.values(editedTransactions).forEach((tx) => {
+        if (
+          typeof tx.transaction_id === "string" &&
+          tx.transaction_id.startsWith("new-")
+        ) {
+          newTxs.push(tx);
+        } else {
+          existingTxs.push(tx);
+        }
       });
 
-      const data = await res.json();
+      // ✅ DEBUG LOG: Check what's being sent
+      newTxs.forEach((tx) =>
+        console.log("Creating transaction with payload:", tx)
+      );
 
-      if (!res.ok) throw new Error(data.error || "Save failed");
+      for (const newTx of newTxs) {
+        const response = await fetch("/api/transactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: parseFloat(newTx.amount),
+            transaction_date: newTx.transaction_date,
+            category_id: parseInt(newTx.category_id),
+            budget_id: newTx.budget_id,
+            description: newTx.description,
+          }),
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || "Failed to create transaction");
+        }
+      }
+
+      if (existingTxs.length > 0) {
+        await fetch("/api/update-transactions", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ transactions: existingTxs }),
+        });
+      }
+
+      if (deletedTransactionIds.length > 0) {
+        await fetch("/api/delete-transactions", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ transaction_ids: deletedTransactionIds }),
+        });
+      }
 
       setMessage("Changes saved successfully!");
       setEditedTransactions({});
-
+      setDeletedTransactionIds([]);
       if (typeof refetchTransactions === "function") {
         refetchTransactions();
       }
@@ -77,6 +170,7 @@ export default function EditableTransactionsTable({
               <th>Amount</th>
               <th>Category</th>
               <th>Date</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -98,7 +192,11 @@ export default function EditableTransactionsTable({
                     type="number"
                     value={tx.amount}
                     onChange={(e) =>
-                      handleChange(index, "amount", e.target.value)
+                      handleChange(
+                        index,
+                        "amount",
+                        e.target.value === "" ? "" : parseFloat(e.target.value)
+                      )
                     }
                     className="w-full input input-bordered"
                   />
@@ -113,7 +211,8 @@ export default function EditableTransactionsTable({
                         parseInt(e.target.value)
                       )
                     }
-                    className="w-full select select-bordered">
+                    className="w-full select select-bordered"
+                  >
                     <option value="">Select Category</option>
                     {categories.map((cat) => (
                       <option key={cat.category_id} value={cat.category_id}>
@@ -122,7 +221,6 @@ export default function EditableTransactionsTable({
                     ))}
                   </select>
                 </td>
-
                 <td>
                   <input
                     type="date"
@@ -133,6 +231,14 @@ export default function EditableTransactionsTable({
                     className="w-full input input-bordered"
                   />
                 </td>
+                <td>
+                  <button
+                    onClick={() => handleDeleteRow(index)}
+                    className="btn btn-xs btn-error"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -140,10 +246,14 @@ export default function EditableTransactionsTable({
       </div>
 
       <div className="flex items-center gap-4 mt-4">
+        <button onClick={handleAddRow} className="btn btn-secondary">
+          Add Row
+        </button>
         <button
           onClick={handleSave}
           className="btn btn-primary"
-          disabled={isSaving}>
+          disabled={isSaving}
+        >
           {isSaving ? "Saving..." : "Save Changes"}
         </button>
         {message && <p className="text-sm text-gray-600">{message}</p>}
