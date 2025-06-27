@@ -131,7 +131,7 @@ export default function ViewBudget() {
               />
             </div>
             <div className="w-[500px] h-fit bg-base-100 shadow rounded-box mr-100 p-4 border-3 border-gray-400">
-              <h1 className="mb-4 text-2xl font-semibold">Categories</h1>
+              <Link href="/categories" className="mb-4 text-2xl font-semibold">Categories</Link>
               <ul className="space-y-2">
                 {categories.length > 0 ? (
                   categories.map((category) => (

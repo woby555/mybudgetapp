@@ -85,7 +85,7 @@ export default async function Dashboard() {
           ))}
         </div>
         <div className="w-[300px] h-fit bg-base-100 shadow rounded-box mr-100 p-4 border-3 border-gray-400">
-          <h1 className="mb-4 text-2xl font-semibold">Categories</h1>
+          <Link href="/categories" className="mb-4 text-2xl font-semibold underline">Categories</Link>
           <ul className="space-y-2">
             {categories.length > 0 ? (
               categories.map((category) => (
