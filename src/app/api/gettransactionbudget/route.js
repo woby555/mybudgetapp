@@ -38,7 +38,7 @@ export async function GET(req) {
     const transactions = await prisma.transactions.findMany({
       where: { budget_id, user_id },
       include: { categories: true },
-      orderBy: { transaction_date: "desc" },
+      orderBy: { transaction_date: "asc" },
     });
 
     return new Response(JSON.stringify({ budget, transactions }), {

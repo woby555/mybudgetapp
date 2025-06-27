@@ -27,6 +27,9 @@ export default async function Dashboard() {
 
   const transactions = await prisma.transactions.findMany({
     where: { user_id: userId },
+    include: {
+      categories: true,
+    },
   });
 
   const plainTransactions = transactions.map((tx) => ({
@@ -90,6 +93,14 @@ export default async function Dashboard() {
                   key={category.category_id}
                   className="flex items-center justify-between p-3 border-b last:border-b-0">
                   <div className="font-medium">{category.name}</div>
+                  <span
+                    className={`mt-1 text-sm font-semibold ${
+                      category.type === "income"
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}>
+                    {category.type === "income" ? "↑ Income" : "↓ Expense"}
+                  </span>
                 </li>
               ))
             ) : (

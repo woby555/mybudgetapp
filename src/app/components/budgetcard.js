@@ -1,4 +1,3 @@
-
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -18,14 +17,23 @@ export default function BudgetCard({ budget, transactions }) {
     );
   });
 
-  const spent = budgetTransactions.reduce(
-    (sum, tx) => sum + parseFloat(tx.amount),
-    0
-  );
+const spent = budgetTransactions.reduce((sum, tx) => {
+  const amount = parseFloat(tx.amount);
+  if (tx.categories.type === "income") {
+    return sum - amount; // income increases remaining, reduces spent
+  } else {
+    return sum + amount; // expense increases spent
+  }
+}, 0);
+
+
   const roundedSpent = parseFloat(Number(spent.toFixed(2)));
   const roundedRemaining = parseFloat(
     (Number(budget.amount) - roundedSpent).toFixed(2)
   );
+
+  // Ensure remaining is not negative
+  const displaySpent = roundedRemaining < 0 ? 0 : roundedSpent;
 
   const onDeleteTransaction = async (transactionId) => {
     try {
@@ -59,20 +67,20 @@ export default function BudgetCard({ budget, transactions }) {
         <div className="relative max-w-6xl p-8 bg-white border-gray-400 rounded-lg shadow-md border-3">
           <div>
             <Link href={`/viewbudget?budget_id=${budget.budget_id}`}>
-            <div className="px-0 text-lg font-bold text-gray-500 underline text-underline">
-              {budget.name}
-            </div>
+              <div className="px-0 text-lg font-bold text-gray-500 underline text-underline">
+                {budget.name}
+              </div>
             </Link>
             <div className="mb-2 text-3xl font-bold">${budget.amount}</div>
 
             <Link
-                href={`/addtransaction?budget_id=${budget.budget_id}`}
-                className="mt-4 btn btn-primary">
-                Add Transaction
-              </Link>
+              href={`/addtransaction?budget_id=${budget.budget_id}`}
+              className="mt-4 btn btn-primary">
+              Add Transaction
+            </Link>
             <div className="flex items-center justify-between mt-4">
               <div className="text-lg font-medium text-red-500">
-                ${roundedSpent} Spent
+                ${displaySpent} Spent
               </div>
               <div className="text-lg font-medium text-green-600">
                 ${roundedRemaining} Remaining
@@ -103,13 +111,26 @@ export default function BudgetCard({ budget, transactions }) {
                           <div className="font-medium text-gray-900">
                             ${tx.amount}
                           </div>
+                          <div
+                            className={`text-sm font-medium ${
+                              tx.categories.type === "income"
+                                ? "text-green-500"
+                                : "text-red-500"
+                            }`}>
+                            {tx.categories.type.charAt(0).toUpperCase() +
+                              tx.categories.type.slice(1)}
+                          </div>
                           <div className="mt-1 text-gray-600">
                             {tx.description}
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="text-sm text-gray-500">
-                          {new Date(tx.transaction_date).toISOString().split("T")[0]}
+                            {
+                              new Date(tx.transaction_date)
+                                .toISOString()
+                                .split("T")[0]
+                            }
                           </div>
                           <button
                             className="text-sm font-bold text-red-500 hover:text-red-700"

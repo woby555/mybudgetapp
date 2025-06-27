@@ -64,14 +64,16 @@ export default function ViewBudget() {
   const fetchBudget = async () => {
     if (!budget_id) return;
     try {
-      const res = await fetch(`/api/gettransactionbudget?budget_id=${budget_id}`);
+      const res = await fetch(
+        `/api/gettransactionbudget?budget_id=${budget_id}`
+      );
       const text = await res.text();
-  
+
       if (!res.ok) {
         console.error("Budget fetch failed:", text);
         return;
       }
-  
+
       const data = JSON.parse(text);
       setBudgetData(data);
     } catch (err) {
@@ -84,7 +86,7 @@ export default function ViewBudget() {
       alert("Please enter a valid budget name.");
       return;
     }
-    
+
     try {
       const res = await fetch("/api/updatebudgetname", {
         method: "PATCH",
@@ -98,7 +100,10 @@ export default function ViewBudget() {
 
       if (res.ok) {
         alert("Budget name updated successfully!");
-        setBudgetData((prev) => ({ ...prev, budget: { ...prev.budget, name: newBudgetName } }));
+        setBudgetData((prev) => ({
+          ...prev,
+          budget: { ...prev.budget, name: newBudgetName },
+        }));
       } else {
         alert(data.error || "Error updating budget name");
       }
@@ -106,7 +111,6 @@ export default function ViewBudget() {
       console.error("Error saving budget name:", err);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-base-100 text-base-content">
@@ -119,16 +123,44 @@ export default function ViewBudget() {
 
       {budgetData && (
         <>
-          <div className="w-full max-w-full mb-8 ml-4">
-            <BudgetCard
-              budget={budgetData.budget}
-              transactions={budgetData.transactions}
-            />
+          <div className="flex gap-4">
+            <div className="flex flex-col flex-grow max-w-full gap-4 overflow-y-auto w-full max-w-full mb-8 ml-4">
+              <BudgetCard
+                budget={budgetData.budget}
+                transactions={budgetData.transactions}
+              />
+            </div>
+            <div className="w-[500px] h-fit bg-base-100 shadow rounded-box mr-100 p-4 border-3 border-gray-400">
+              <h1 className="mb-4 text-2xl font-semibold">Categories</h1>
+              <ul className="space-y-2">
+                {categories.length > 0 ? (
+                  categories.map((category) => (
+                    <li
+                      key={category.category_id}
+                      className="flex items-center justify-between p-3 border-b last:border-b-0">
+                      <div className="font-medium">{category.name}</div>
+                      <span
+                        className={`mt-1 text-sm font-semibold ${
+                          category.type === "income"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}>
+                        {category.type === "income" ? "↑ Income" : "↓ Expense"}
+                      </span>
+                    </li>
+                  ))
+                ) : (
+                  <div className="text-sm text-gray-500">
+                    No categories found
+                  </div>
+                )}
+              </ul>
+            </div>
           </div>
           <div className="p-4 mb-6 ml-4 text-lg font-semibold bg-white border border-gray-300 rounded-lg shadow-lg max-w-fit">
-              <label htmlFor="budgetName" className="font-bold">
-                Update Budget Name:
-              </label>
+            <label htmlFor="budgetName" className="font-bold">
+              Update Budget Name:
+            </label>
             <input
               id="budgetName"
               name="budgetName"
@@ -139,9 +171,12 @@ export default function ViewBudget() {
               className="w-64 ml-2 input input-bordered input-sm"
               required
             />
-              <button type="submit" className="ml-2 btn btn-primary btn-sm" onClick={handleSaveBudgetName}>
-                Save
-              </button>
+            <button
+              type="submit"
+              className="ml-2 btn btn-primary btn-sm"
+              onClick={handleSaveBudgetName}>
+              Save
+            </button>
           </div>
 
           <div className="flex-1 p-4 ml-4 overflow-x-auto bg-white border border-gray-300 rounded-lg shadow-lg">

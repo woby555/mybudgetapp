@@ -160,6 +160,10 @@ export default function EditableTransactionsTable({
   return (
     <div>
       <h3 className="mb-2 text-lg font-semibold">Transactions</h3>
+      <h4 className="mb-4 text-sm text-gray-600">
+        You can edit the transactions below. Click "Save Changes" to apply your
+        edits.
+      </h4>
 
       <div className="overflow-x-auto">
         <table className="table w-full bg-white rounded shadow">
@@ -202,24 +206,46 @@ export default function EditableTransactionsTable({
                   />
                 </td>
                 <td>
-                  <select
-                    value={tx.category_id || ""}
-                    onChange={(e) =>
-                      handleChange(
-                        index,
-                        "category_id",
-                        parseInt(e.target.value)
-                      )
-                    }
-                    className="w-full select select-bordered"
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((cat) => (
-                      <option key={cat.category_id} value={cat.category_id}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="flex flex-col mt-6">
+                    <select
+                      value={tx.category_id || ""}
+                      onChange={(e) =>
+                        handleChange(
+                          index,
+                          "category_id",
+                          parseInt(e.target.value)
+                        )
+                      }
+                      className="w-full select select-bordered">
+                      <option value="">Select Category</option>
+                      {categories.map((cat) => (
+                        <option key={cat.category_id} value={cat.category_id}>
+                          {cat.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    {tx.category_id &&
+                      (() => {
+                        const selectedCategory = categories.find(
+                          (cat) => cat.category_id === tx.category_id
+                        );
+                        if (!selectedCategory) return null;
+
+                        return (
+                          <span
+                            className={`mt-1 ml-1 text-sm font-semibold ${
+                              selectedCategory.type === "income"
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}>
+                            {selectedCategory.type === "income"
+                              ? "↑ Income"
+                              : "↓ Expense"}
+                          </span>
+                        );
+                      })()}
+                  </div>
                 </td>
                 <td>
                   <input
@@ -234,8 +260,7 @@ export default function EditableTransactionsTable({
                 <td>
                   <button
                     onClick={() => handleDeleteRow(index)}
-                    className="btn btn-xs btn-error"
-                  >
+                    className="btn btn-xs btn-error">
                     Delete
                   </button>
                 </td>
@@ -252,8 +277,7 @@ export default function EditableTransactionsTable({
         <button
           onClick={handleSave}
           className="btn btn-primary"
-          disabled={isSaving}
-        >
+          disabled={isSaving}>
           {isSaving ? "Saving..." : "Save Changes"}
         </button>
         {message && <p className="text-sm text-gray-600">{message}</p>}
