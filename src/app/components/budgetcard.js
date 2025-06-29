@@ -17,15 +17,14 @@ export default function BudgetCard({ budget, transactions }) {
     );
   });
 
-const spent = budgetTransactions.reduce((sum, tx) => {
-  const amount = parseFloat(tx.amount);
-  if (tx.categories.type === "income") {
-    return sum - amount; // income increases remaining, reduces spent
-  } else {
-    return sum + amount; // expense increases spent
-  }
-}, 0);
-
+  const spent = budgetTransactions.reduce((sum, tx) => {
+    const amount = parseFloat(tx.amount);
+    if (tx.categories && tx.categories.type === "income") {
+      return sum - amount; // income increases remaining, reduces spent
+    } else {
+      return sum + amount; // expense increases spent
+    }
+  }, 0);
 
   const roundedSpent = parseFloat(Number(spent.toFixed(2)));
   const roundedRemaining = parseFloat(
@@ -71,7 +70,25 @@ const spent = budgetTransactions.reduce((sum, tx) => {
                 {budget.name}
               </div>
             </Link>
-            <div className="mb-2 text-3xl font-bold">${budget.amount}</div>
+            <div className="text-sm text-gray-500">
+              {budget.start_date
+                ? new Date(budget.start_date).toLocaleDateString()
+                : "No start date"}{" "}
+              to{" "}
+              {budget.end_date
+                ? new Date(budget.end_date).toLocaleDateString()
+                : "No end date"}
+            </div>
+            <div className="mb-2 text-3xl font-bold">
+              ${budget.amount} +
+              <span className="text-lg font-normal text-gray-500">
+                $
+                {(roundedRemaining < 0
+                  ? 0
+                  : roundedRemaining - budget.amount
+                ).toFixed(2)}
+              </span>
+            </div>
 
             <Link
               href={`/addtransaction?budget_id=${budget.budget_id}`}
@@ -113,12 +130,16 @@ const spent = budgetTransactions.reduce((sum, tx) => {
                           </div>
                           <div
                             className={`text-sm font-medium ${
-                              tx.categories.type === "income"
-                                ? "text-green-500"
-                                : "text-red-500"
+                              tx.categories
+                                ? tx.categories.type === "income"
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                                : "text-gray-500"
                             }`}>
-                            {tx.categories.type.charAt(0).toUpperCase() +
-                              tx.categories.type.slice(1)}
+                            {tx.categories
+                              ? tx.categories.type.charAt(0).toUpperCase() +
+                                tx.categories.type.slice(1)
+                              : "Uncategorized"}
                           </div>
                           <div className="mt-1 text-gray-600">
                             {tx.description}

@@ -18,7 +18,7 @@ export default function CreateCategory() {
     setError('');
     setSuccess('');
 
-    const res = await fetch("/api/createcategories", {
+    const res = await fetch("/api/createcategory", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export default function CreateCategory() {
         setError(data.error || "Something went wrong!");
     } else {
         setSuccess("Added category!");
-        router.push("/dashboard"); // Redirect to dashboard or any other page
+        router.push("/categories");
     }
   };
 

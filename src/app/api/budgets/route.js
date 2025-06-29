@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/app/lib/prisma";
+import { start } from "repl";
 
 export async function POST(request){
     const session = await getServerSession(authOptions);
@@ -11,17 +12,20 @@ export async function POST(request){
 
     const {name, amount, start_date, end_date} = await request.json();
 
-    if (!name || !amount || !start_date || !end_date) {
+    if (!name || !amount) {
         return new Response("Missing required fields", { status: 400 });
-    }   
+    }
+    
+    const startDate = start_date ? new Date(start_date) : null;
+    const endDate = end_date ? new Date(end_date) : null;
 
     try{
         const budget = await prisma.budgets.create({
             data: {
                 name,
                 amount: parseFloat(amount),
-                start_date: new Date(start_date),
-                end_date: new Date(end_date),
+                start_date: startDate,
+                end_date: endDate,
                 user_id: parseInt(session.user.id),
                 created_at: new Date().toISOString(),
             },

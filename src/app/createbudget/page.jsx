@@ -82,7 +82,6 @@ export default function CreateBudget() {
               name="start_date"
               value={start_date}
               onChange={(e) => setStartDate(e.target.value)}
-              required
               className="w-full px-3 py-2 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -94,7 +93,6 @@ export default function CreateBudget() {
               name="end_date"
               value={end_date}
               onChange={(e) => setEndDate(e.target.value)}
-              required
               className="w-full px-3 py-2 text-black border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
