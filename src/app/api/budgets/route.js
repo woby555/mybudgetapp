@@ -45,8 +45,15 @@ export async function PATCH(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { budget_id, new_name } = await req.json();
+  const {
+    budget_id,
+    new_name,
+    new_amount,
+    new_start_date,
+    new_end_date,
+  } = await req.json();
 
+  // Validate budget_id and new_name minimally (adjust stricter validation as needed)
   if (
     !budget_id ||
     !new_name ||
@@ -68,13 +75,41 @@ export async function PATCH(req) {
       return NextResponse.json({ error: "Budget not found or unauthorized" }, { status: 404 });
     }
 
+    const updateData = {
+      name: new_name.trim(),
+    };
+
+    if (new_amount !== undefined) {
+      const parsedAmount = parseFloat(new_amount);
+      if (isNaN(parsedAmount) || parsedAmount < 0) {
+        return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
+      }
+      updateData.amount = parsedAmount;
+    }
+
+    if (new_start_date) {
+      const parsedStartDate = new Date(new_start_date);
+      if (isNaN(parsedStartDate.getTime())) {
+        return NextResponse.json({ error: "Invalid start date" }, { status: 400 });
+      }
+      updateData.start_date = parsedStartDate;
+    }
+
+    if (new_end_date) {
+      const parsedEndDate = new Date(new_end_date);
+      if (isNaN(parsedEndDate.getTime())) {
+        return NextResponse.json({ error: "Invalid end date" }, { status: 400 });
+      }
+      updateData.end_date = parsedEndDate;
+    }
+
     const updatedBudget = await prisma.budgets.update({
       where: { budget_id: parseInt(budget_id) },
-      data: { name: new_name },
+      data: updateData,
     });
 
     return NextResponse.json(
-      { message: "Budget name updated successfully", budget: updatedBudget },
+      { message: "Budget updated successfully", budget: updatedBudget },
       { status: 200 }
     );
   } catch (err) {
@@ -82,3 +117,4 @@ export async function PATCH(req) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
+

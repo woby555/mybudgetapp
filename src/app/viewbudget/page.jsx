@@ -38,7 +38,6 @@ export default function ViewBudget() {
     }
   };
 
-  // ✅ Fetch categories list
   const fetchCategories = async () => {
     try {
       const res = await fetch("/api/categories");
@@ -63,7 +62,6 @@ export default function ViewBudget() {
     fetchCategories();
   }, []);
 
-  // ✅ Handle budget name update
   const handleSaveBudgetName = async () => {
     if (!budget_id || !newBudgetName.trim()) {
       alert("Please enter a valid budget name.");
@@ -83,10 +81,8 @@ export default function ViewBudget() {
 
       if (res.ok) {
         alert("Budget name updated successfully!");
-        setBudgetData((prev) => ({
-          ...prev,
-          budget: { ...prev.budget, name: newBudgetName },
-        }));
+        setNewBudgetName(""); 
+        await fetchBudget(); 
       } else {
         alert(data.error || "Error updating budget name");
       }
@@ -114,7 +110,11 @@ export default function ViewBudget() {
               />
             </div>
             <div className="w-[500px] h-fit bg-base-100 shadow rounded-box mr-100 p-4 border-3 border-gray-400">
-              <Link href="/categories" className="mb-4 text-2xl font-semibold underline">Categories</Link>
+              <Link
+                href="/categories"
+                className="mb-4 text-2xl font-semibold underline">
+                Categories
+              </Link>
               <ul className="space-y-2">
                 {categories.length > 0 ? (
                   categories.map((category) => (
