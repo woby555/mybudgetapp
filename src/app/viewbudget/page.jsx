@@ -19,54 +19,11 @@ export default function ViewBudget() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchBudget = async () => {
-      if (!budget_id) return;
-      try {
-        const res = await fetch(
-          `/api/gettransactionbudget?budget_id=${budget_id}`
-        );
-
-        const text = await res.text();
-        if (!res.ok) {
-          console.error("Budget fetch failed:", text);
-          return;
-        }
-
-        const data = JSON.parse(text);
-        setBudgetData(data);
-      } catch (err) {
-        console.error("Error fetching budget:", err);
-      }
-    };
-    fetchBudget();
-  }, [budget_id]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("/api/getcategories");
-        const text = await res.text();
-        if (!res.ok) {
-          console.error("Categories fetch failed:", text);
-          return;
-        }
-
-        const data = JSON.parse(text);
-        setCategories(data);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-      }
-    };
-    fetchCategories();
-  }, []);
-
+  // ✅ Fetch budget and its transactions
   const fetchBudget = async () => {
     if (!budget_id) return;
     try {
-      const res = await fetch(
-        `/api/gettransactionbudget?budget_id=${budget_id}`
-      );
+      const res = await fetch(`/api/transactions?budget_id=${budget_id}`);
       const text = await res.text();
 
       if (!res.ok) {
@@ -81,6 +38,32 @@ export default function ViewBudget() {
     }
   };
 
+  // ✅ Fetch categories list
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories");
+      const text = await res.text();
+      if (!res.ok) {
+        console.error("Categories fetch failed:", text);
+        return;
+      }
+
+      const data = JSON.parse(text);
+      setCategories(data);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBudget();
+  }, [budget_id]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  // ✅ Handle budget name update
   const handleSaveBudgetName = async () => {
     if (!budget_id || !newBudgetName.trim()) {
       alert("Please enter a valid budget name.");
@@ -88,7 +71,7 @@ export default function ViewBudget() {
     }
 
     try {
-      const res = await fetch("/api/updatebudgetname", {
+      const res = await fetch("/api/budgets", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

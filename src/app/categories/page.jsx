@@ -11,7 +11,7 @@ export default function CategoriesPage() {
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch("/api/getcategories");
+      const res = await fetch("/api/categories");
       if (res.ok) {
         const data = await res.json();
         setCategories(data);
@@ -33,7 +33,7 @@ export default function CategoriesPage() {
     if (!deleteTarget) return;
     try {
       const res = await fetch(
-        `/api/deletecategory/${deleteTarget.category_id}`,
+        `/api/categories?id=${deleteTarget.category_id}`,
         {
           method: "DELETE",
         }
@@ -54,7 +54,7 @@ export default function CategoriesPage() {
   const handleEdit = async (category) => {
     if (!category || !category.category_id) return;
     try {
-      const res = await fetch(`/api/editcategory`, {
+      const res = await fetch(`/api/categories`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

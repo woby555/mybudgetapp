@@ -24,7 +24,7 @@ export default function CreateBudget() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("/api/getcategories");
+        const res = await fetch("/api/categories");
         const data = await res.json();
         if (res.ok) setCategories(data);
       } catch (err) {

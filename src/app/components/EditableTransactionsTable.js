@@ -136,7 +136,7 @@ export default function EditableTransactionsTable({
       }
 
       if (deletedTransactionIds.length > 0) {
-        await fetch("/api/delete-transactions", {
+        await fetch("/api/transactions", {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ transaction_ids: deletedTransactionIds }),
