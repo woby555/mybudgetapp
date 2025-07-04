@@ -73,19 +73,29 @@ export default async function Dashboard() {
       <h2 className="mt-8 mb-4 ml-4 text-xl font-semibold">Your Budgets</h2>
       <div className="flex gap-4 mb-4 ml-4">
         <div className="flex flex-col flex-grow max-w-full gap-6 overflow-y-auto">
-          {budgets.map((budget) => (
-            <BudgetCard
-              key={budget.budget_id}
-              budget={{
-                ...budget,
-                amount: budget.amount.toNumber(), // convert Decimal to number
-              }}
-              transactions={plainTransactions}
-            />
-          ))}
+          {budgets.map((budget) => {
+            const budgetTransactions = plainTransactions.filter(
+              (tx) => tx.budget_id === budget.budget_id
+            );
+
+            return (
+              <BudgetCard
+                key={budget.budget_id}
+                budget={{
+                  ...budget,
+                  amount: budget.amount.toNumber(),
+                }}
+                transactions={budgetTransactions}
+              />
+            );
+          })}
         </div>
         <div className="w-[300px] h-fit bg-base-100 shadow rounded-box mr-100 p-4 border-3 border-gray-400">
-          <Link href="/categories" className="mb-4 text-2xl font-semibold underline">Categories</Link>
+          <Link
+            href="/categories"
+            className="mb-4 text-2xl font-semibold underline">
+            Categories
+          </Link>
           <ul className="space-y-2">
             {categories.length > 0 ? (
               categories.map((category) => (

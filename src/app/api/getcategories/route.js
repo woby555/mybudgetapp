@@ -6,7 +6,9 @@ export async function GET(req) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+    });
   }
 
   try {
@@ -15,18 +17,22 @@ export async function GET(req) {
       where: {
         user_id: parseInt(session.user.id), // Ensure we filter categories by the logged-in user's ID
       },
+      orderBy: { created_at: "desc" },
     });
 
     return new Response(JSON.stringify(categories), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error('Error retrieving categories:', error);
-    return new Response(JSON.stringify({ error: 'Failed to retrieve categories' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.error("Error retrieving categories:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to retrieve categories" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } finally {
     await prisma.$disconnect();
   }
