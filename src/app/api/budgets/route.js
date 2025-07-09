@@ -118,3 +118,39 @@ export async function PATCH(req) {
   }
 }
 
+export async function DELETE(req) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { budget_id } = await req.json();
+
+  if (!budget_id) {
+    return NextResponse.json({ error: "Missing budget_id" }, { status: 400 });
+  }
+
+  try {
+    const budget = await prisma.budgets.findFirst({
+      where: {
+        budget_id: parseInt(budget_id),
+        user_id: parseInt(session.user.id),
+      },
+    });
+
+    if (!budget) {
+      return NextResponse.json({ error: "Budget not found or unauthorized" }, { status: 404 });
+    }
+
+    await prisma.budgets.delete({
+      where: { budget_id: parseInt(budget_id) },
+    });
+
+    return NextResponse.json({ message: "Budget deleted successfully" }, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting budget:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+

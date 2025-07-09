@@ -9,6 +9,7 @@ export default function BudgetCard({ budget, transactions }) {
 
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
+  const [deleteBudgetTarget, setDeleteBudgetTarget] = useState(null);
 
   const budgetTransactions = transactions.filter((tx) => {
     const date = new Date(tx.transaction_date);
@@ -64,6 +65,31 @@ export default function BudgetCard({ budget, transactions }) {
     router.refresh(); // refresh the page to reflect changes
   };
 
+  const confirmDeleteBudget = async () => {
+    if (deleteBudgetTarget) {
+      try {
+        const res = await fetch("/api/budgets", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            budget_id: deleteBudgetTarget.budget_id,
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to delete budget");
+        }
+
+        setDeleteBudgetTarget(null);
+        router.refresh();
+      } catch (error) {
+        console.error("Error deleting budget:", error);
+      }
+    }
+  }
+
   return (
     <>
       <div className="justify-center mb-4 text-base-content">
@@ -93,6 +119,10 @@ export default function BudgetCard({ budget, transactions }) {
                 ).toFixed(2)}
               </span>
             </div>
+            
+              <button className="btn btn-secondary absolute top-8 right-4" onClick={() => setDeleteBudgetTarget(budget)}>
+                Delete Budget
+              </button>
 
             <button
               className="mt-4 btn btn-primary"
@@ -315,6 +345,53 @@ export default function BudgetCard({ budget, transactions }) {
                 </button>
               </div>
             </form>
+          </div>
+        </dialog>
+      )}
+
+      {/* Delete Budget Confirmation Modal */}
+      {deleteBudgetTarget && (
+        <dialog id="delete_budget_modal" className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="text-lg font-bold">Confirm Budget Deletion</h3>
+            <p className="py-4">
+              Are you sure you want to delete the budget "
+              <span className="font-semibold">{deleteBudgetTarget.name}</span>"?
+              This action cannot be undone.
+            </p>
+            <div className="modal-action">
+              <button
+                className="btn btn-error"
+                onClick={async () => {
+                  try {
+                    const res = await fetch("/api/budgets", {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        budget_id: deleteBudgetTarget.budget_id,
+                      }),
+                    });
+
+                    if (!res.ok) {
+                      throw new Error("Failed to delete budget");
+                    }
+
+                    setDeleteBudgetTarget(null);
+                    router.push("/dashboard");
+                  } catch (error) {
+                    console.error("Error deleting budget:", error);
+                  }
+                }}>
+                Yes, delete
+              </button>
+              <button
+                className="btn"
+                onClick={() => setDeleteBudgetTarget(null)}>
+                Cancel
+              </button>
+            </div>
           </div>
         </dialog>
       )}
