@@ -20,11 +20,10 @@ mybudgetapp makes budgeting simple. Log expenses, categorize spending, and see i
 - Interactive charts for trends and budgeting insights  
 
 ## Tech Stack
-- **Next.js** – server-rendered React framework  
-- **Prisma** – ORM for database access  
-- **PostgreSQL** *(or SQLite)* – database backend  
+- ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) – server-rendered React framework  
+- ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white) – ORM for database access  
+- ![Postgres](https://img.shields.io/badge/Postgres-316192?style=for-the-badge&logo=postgresql&logoColor=white) – database backend  
 - **Tailwind CSS / daisyUI** – styling  
-- **Vercel** – deployment platform (optional)
 
 ## Getting Started
 
