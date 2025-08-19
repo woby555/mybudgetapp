@@ -8,7 +8,6 @@ A modern, user-friendly budgeting application built with Next.js and Prisma to h
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
-- [License](#license)
 - [Contact](#contact)
 
 ## About the Project
@@ -50,8 +49,6 @@ Visit `http://localhost:3000` to view the app.
 3. Add your income and expenses  
 4. View categorized spending and trends
 
-## License
-Distributed under the [MIT License](LICENSE).
 
 ## Contact
 Created by Jake Licmo. Have questions or feedback? Reach me at **licmojake555.com**.
