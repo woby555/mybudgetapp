@@ -50,4 +50,4 @@ Visit `http://localhost:3000` to view the app.
 
 
 ## Contact
-Created by Jake Licmo. Have questions or feedback? Reach me at **licmojake555.com**.
+Created by Jake Licmo. Have questions or feedback? Reach me at **licmojake555@gmail.com**.
